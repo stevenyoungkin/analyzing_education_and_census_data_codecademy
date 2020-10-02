@@ -26,21 +26,21 @@ ORDER BY num_hs_per_state DESC;
 
 SELECT locale_code,
 	CASE  
-		WHEN locale_code IN (11, 12, 13) THEN 'City'
-		WHEN locale_code IN (21, 22, 23) THEN 'Suburb'
-		WHEN locale_code IN (31, 32, 33) THEN 'Town'
-		WHEN locale_code IN (41, 42, 43) THEN 'Rural'
-		ELSE 'Unknown'
+	  WHEN locale_code IN (11, 12, 13) THEN 'City'
+          WHEN locale_code IN (21, 22, 23) THEN 'Suburb'
+          WHEN locale_code IN (31, 32, 33) THEN 'Town'
+	  WHEN locale_code IN (41, 42, 43) THEN 'Rural'
+	  ELSE 'Unknown'
 	END AS 'locale_text'
 	,
 	CASE 
-		WHEN locale_code IN (11, 21) THEN 'Large'
-		WHEN locale_code IN (12, 22) THEN 'Midsize'
-		WHEN locale_code IN (13, 23) THEN 'Small'
-		WHEN locale_code IN (31, 41) THEN 'Fringe'
-		WHEN locale_code IN (32, 42) THEN 'Distant'
-		WHEN locale_code IN (33, 43) THEN 'Remote'
-		ELSE 'Unknown'
+	  WHEN locale_code IN (11, 21) THEN 'Large'
+	  WHEN locale_code IN (12, 22) THEN 'Midsize'
+	  WHEN locale_code IN (13, 23) THEN 'Small'
+	  WHEN locale_code IN (31, 41) THEN 'Fringe'
+	  WHEN locale_code IN (32, 42) THEN 'Distant'
+	  WHEN locale_code IN (33, 43) THEN 'Remote'
+	ELSE 'Unknown'
 	END AS 'locale_size'
 FROM public_hs_data
 LIMIT 50;
@@ -75,10 +75,10 @@ WITH income_category AS
 	(
 	SELECT zip_code, median_household_income,
 		CASE 
-			WHEN median_household_income < 50000 THEN 1	
-			WHEN median_household_income BETWEEN 50000 AND 100000 THEN 2
-			WHEN median_household_income > 100000 THEN 3
-			ELSE 0 
+		  WHEN median_household_income < 50000 THEN 1	
+		  WHEN median_household_income BETWEEN 50000 AND 100000 THEN 2
+		  WHEN median_household_income > 100000 THEN 3
+		  ELSE 0 
 		END AS 'income_cat'
 	FROM census_data 
 	WHERE median_household_income != 'NULL'
@@ -106,13 +106,13 @@ FROM public_hs_data;
 WITH 'prof_category' AS 
 	(
 	SELECT state_code, 
-			ROUND(AVG(pct_profficient_math),2) AS 'avg_math_prof', 
-			ROUND(AVG(pct_proficient_reading),2) AS ' avg_read_prof',
-			CASE
-				WHEN ROUND(AVG(pct_profficient_math),2) > ROUND(AVG(pct_proficient_reading),2)THEN 1
-				WHEN ROUND(AVG(pct_profficient_math),2) < ROUND(AVG(pct_proficient_reading),2) THEN 2			
-				ELSE 0
-			END AS 'prof_cat'
+		ROUND(AVG(pct_profficient_math),2) AS 'avg_math_prof', 
+		ROUND(AVG(pct_proficient_reading),2) AS ' avg_read_prof',
+		CASE
+		  WHEN ROUND(AVG(pct_profficient_math),2) > ROUND(AVG(pct_proficient_reading),2)THEN 1
+		  WHEN ROUND(AVG(pct_profficient_math),2) < ROUND(AVG(pct_proficient_reading),2) THEN 2			
+		  ELSE 0
+		END AS 'prof_cat'
 	FROM public_hs_data
 	GROUP BY state_code
 	)
@@ -130,12 +130,12 @@ GROUP BY prof_category.prof_cat;
 WITH state_code_prof AS 
 	(
 	SELECT state_code, 
-			ROUND(MIN(pct_profficient_math),2) AS 'min_math_prof',
-			ROUND(MAX(pct_profficient_math),2) AS 'max_math_prof',
-			ROUND(AVG(pct_profficient_math),2) AS 'avg_math_prof',
-			ROUND(MIN(pct_proficient_reading),2) AS 'min_read_prof',
-			ROUND(MAX(pct_proficient_reading),2) AS 'max_read_prof',
-			ROUND(AVG(pct_proficient_reading),2) AS 'avg_read_prof'
+		ROUND(MIN(pct_profficient_math),2) AS 'min_math_prof',
+		ROUND(MAX(pct_profficient_math),2) AS 'max_math_prof',
+		ROUND(AVG(pct_profficient_math),2) AS 'avg_math_prof',
+		ROUND(MIN(pct_proficient_reading),2) AS 'min_read_prof',
+		ROUND(MAX(pct_proficient_reading),2) AS 'max_read_prof',
+		ROUND(AVG(pct_proficient_reading),2) AS 'avg_read_prof'
 	FROM public_hs_data
 	GROUP BY state_code
 	)
